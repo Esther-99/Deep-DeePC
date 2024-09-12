@@ -5,7 +5,7 @@ Date: 18/04/2024
 Project: DeepDeePC
 """
 import numpy as np
-from gym import spaces
+from gymnasium import spaces
 import matplotlib.pyplot as plt
 import argparse
 
@@ -48,6 +48,7 @@ def generate_setpoints(N_sp=100, system='threetanks') -> None:
         for j in range(N_sp):
             plant.reset()
             us = action_space.sample()
+            # Wait for the system to reach the steady state
             for i in range(10000):
                 plant.step(us, p_constant=True) if system == 'WWTPs' else plant.step(us)
             xs = plant.state_buffer.memory[-1]

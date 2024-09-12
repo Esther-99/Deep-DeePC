@@ -132,8 +132,9 @@ class train(object):
         u_ = u_[:self.data_size, :]
         y_ = y_[:self.data_size, :]
         L = self.Tini + self.Np
-        u_L_ = torch.FloatTensor(np.array([u_[i:i+L, :] for i in range(u_.shape[0]-L+1)])).to(self.device)  # (ud_.shape[0]-L+1, L, u_dim)
-        y_L_ = torch.FloatTensor(np.array([y_[i:i+L, :] for i in range(y_.shape[0]-L+1)])).to(self.device)  # (yd_.shape[0]-L+1, L, y_dim)
+
+        u_L_ = torch.FloatTensor(np.array([u_[i:i+L, :] for i in range(u_.shape[0]-L+1)])).to(self.device)  # (u_.shape[0]-L+1, L, u_dim)
+        y_L_ = torch.FloatTensor(np.array([y_[i:i+L, :] for i in range(y_.shape[0]-L+1)])).to(self.device)  # (y_.shape[0]-L+1, L, y_dim)
         
         input_data, label_data = [], []
         for i in range(len(u_L_)):

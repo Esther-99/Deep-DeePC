@@ -30,7 +30,7 @@ update_variables = dict(
         sp_num=2,  # the number of set-points to test the DeePC configuration
         Q=[5, 5, 5],
         R=[1, 1, 1],
-        P_y=[10, 10, 10],
+        P_y=[10, 10, 10],   # weight of bound constraints
         P_u=[10, 10, 10],
         RDeePC=False,                         # training RDeePC or DeePC 
         lambda_y=[10, 10, 10],            # RDeePC: weight of y mismatch
@@ -61,7 +61,7 @@ update_variables = dict(
         data_size=10000,
         
         # Control set-points
-        control_sp = [6, 7, 8], 
+        control_sp = [1, 2, 3], 
         open_loop = True,
 )
 

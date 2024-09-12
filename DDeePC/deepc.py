@@ -132,7 +132,7 @@ class deepc():
             ys_all.append(np.tile(ys, (self.N if j != 1 else self.N + self.Tini, 1)))
             us_all_.append(np.tile(us_, (self.N if j != 1 else self.N + self.Tini, 1)))
             ys_all_.append(np.tile(ys_, (self.N if j != 1 else self.N + self.Tini, 1)))
-        us_all = np.concatenate(us_all, axis=0)
+        us_all = np.concatenate(us_all, axis=0)     # j * N + Tini
         ys_all = np.concatenate(ys_all, axis=0)
         us_all_ = np.concatenate(us_all_, axis=0)
         ys_all_ = np.concatenate(ys_all_, axis=0)
@@ -210,7 +210,7 @@ class deepc():
                 # plant simulation
                 uk = self.plant.get_action_pid() if pid_flag else self.us_all[0, :]
                 xk1 = self.plant.step(uk, self.noise)[0]
-                
+                # y is one step ahead of u
                 yk_ = datatool.scale(self.y_sc1, self.y_sc2, 'minmax', 'array', self.plant.state_buffer.memory[-2][self.y_idx].reshape(1, -1))
                 cost_y_ = np.linalg.norm(yk_ - self.ys_all_[i:i+1, :])
                 cost_y_ini.append(cost_y_)
@@ -265,7 +265,7 @@ class deepc():
         G, Eu, Ey = np.stack(G), np.stack(Eu), np.stack(Ey)
         cost_y_dpc, t_memory = np.array(cost_y_dpc), np.array(t_memory)
         udpc = np.stack(self.plant.state_buffer.memory_action[self.Tini:])
-        ydpc = np.stack(self.plant.state_buffer.memory[self.Tini:-1])[:, self.y_idx]
+        ydpc = np.stack(self.plant.state_buffer.memory[self.Tini:-1])[:, self.y_idx]    # exclude the last state
         return Uini, Yini, G, Eu, Ey, udpc, ydpc, cost_y_dpc, t_memory        
 
     
@@ -306,7 +306,7 @@ class deepc():
         test_sp_num = 2
         uini0, yini0, uini0_, yini0_, cost_y_ini = self._pid_loop()
         Uini, Yini, G, Eu, Ey, udpc, ydpc, cost_y_dpc, t_memory = self._deepc_loop(uini0_.reshape(-1, 1), yini0_.reshape(-1, 1), test_sp_num)
-        upath = np.stack(self.plant.state_buffer.memory_action)
+        upath = np.stack(self.plant.state_buffer.memory_action)     # including first Tini steps
         ypath = np.stack(self.plant.state_buffer.memory[:-1])[:, self.y_idx]
         # open-loop test
         uopen, yopen = self.open_loop(x0, test_sp_num)

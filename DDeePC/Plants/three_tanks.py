@@ -5,16 +5,19 @@ permalink: https://perma.cc/C9ZM-652R
 """
 
 import math
-import gym
-from gym import spaces, logger
-from gym.utils import seeding
+import gymnasium as gym
+from gymnasium import spaces, logger
+from gymnasium.utils import seeding
 import numpy as np
 import csv
 import matplotlib.pyplot as plt
 
 class three_tank_system(gym.Env):
 
-    def __init__(self, x0_std_dev=0.1, us= np.array([2.87e9, 1.0e9, 2.87e9]), xs=np.array([1.920462734802070026e-01, 6.753561181469071029e-01, 4.768612896432074422e+02, 2.116736585616537936e-01, 6.560585575539794601e-01, 4.695016333820219074e+02, 7.212661966828316784e-02, 6.895290277477214014e-01, 4.715140681309391084e+02])):
+    def __init__(self, x0_std_dev=0.1, us= np.array([2.87e9, 1.0e9, 2.87e9]), 
+                 xs=np.array([1.920462734802070026e-01, 6.753561181469071029e-01, 4.768612896432074422e+02, 
+                              2.116736585616537936e-01, 6.560585575539794601e-01, 4.695016333820219074e+02, 
+                              7.212661966828316784e-02, 6.895290277477214014e-01, 4.715140681309391084e+02])):
         self.t = 0
         self.action_sample_period = 80
         self.sampling_period = 0.025  # 0.005 hour
